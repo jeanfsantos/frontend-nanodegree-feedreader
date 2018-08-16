@@ -1,0 +1,30 @@
+{
+  "name": "frontend-nanodegree-feedreader",
+  "version": "1.0.0",
+  "description": "projeto udacity - frontend nanodegree feedreader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanfsantos/frontend-nanodegree-feedreader.git"
+  },
+  "keywords": [
+    "frontend",
+    "nanodegree",
+    "feedreader"
+  ],
+  "author": "Jean Santos <jeanwfsantos@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jeanfsantos/frontend-nanodegree-feedreader/issues"
+  },
+  "homepage": "https://github.com/jeanfsantos/frontend-nanodegree-feedreader#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.3.0",
+    "eslint-config-google": "^0.9.1"
+  }
+}
