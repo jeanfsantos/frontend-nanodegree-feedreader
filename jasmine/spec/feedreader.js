@@ -8,7 +8,7 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
-$(function() {
+$(function a() {
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
@@ -31,12 +31,19 @@ $(function() {
          * in the allFeeds object and ensures it has a URL defined
          * and that the URL is not empty.
          */
-
+        it('URL are defined', function() {
+            const rs = allFeeds.every((feed) => !!feed.url);
+            expect(rs).toBe(true);
+        });
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+        it('name are defined', function() {
+            const rs = allFeeds.every((feed) => !!feed.name);
+            expect(rs).toBe(true);
+        });
     });
 
 
