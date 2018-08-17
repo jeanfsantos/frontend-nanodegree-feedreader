@@ -9,12 +9,12 @@
  * since some of these tests may require DOM elements. We want
  * to ensure they don't run until the DOM is ready.
  */
-$(function a (win, doc) {
+$(function a(win, doc) {
 	/* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
     */
-	describe('RSS Feeds', function () {
+	describe('RSS Feeds', function() {
 		/* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
          * empty. Experiment with this before you get started on
@@ -22,58 +22,54 @@ $(function a (win, doc) {
          * allFeeds in app.js to be an empty array and refresh the
          * page?
          */
-		it('are defined', function () {
+		it('are defined', function() {
 			expect(allFeeds).toBeDefined();
 			expect(allFeeds.length).not.toBe(0);
 		});
 
-		/* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a URL defined
-         * and that the URL is not empty.
-         */
-		it('URL are defined', function () {
-			const isDefined = allFeeds.every((feed) => !!feed.url);
-			expect(isDefined).toBe(true);
+		/**
+		 * verificado se propriedade url esta definido em cada feed 
+		 * e maior que 0 de comprimento
+		 */
+		it('URL are defined', function() {
+			allFeeds.forEach(feed => {
+				expect(feed.url).toBeDefined();
+				expect(feed.url.length).toBeGreaterThan(0);
+			});
 		});
 
-		/* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
-		it('name are defined', function () {
-			const isDefined = allFeeds.every((feed) => !!feed.name);
-			expect(isDefined).toBe(true);
+		/**
+		 * validar se a propriedade name esta definido em cada feed
+		 * e maior que 0 de comprimento
+		 */
+		it('name are defined', function() {
+			allFeeds.forEach(feed => {
+				expect(feed.name).toBeDefined();
+				expect(feed.name.length).toBeGreaterThan(0);
+			});
 		});
 	});
 
-	/* TODO: Write a new test suite named "The menu" */
-	describe('The menu', function () {
+	// The Menu
+	describe('The menu', function() {
 		let $body = null;
 		let $slideMenu = null;
 
-		beforeEach(function () {
+		beforeEach(function() {
 			$body = doc.body;
 			$slideMenu = doc.querySelector('.slide-menu');
 		});
 
-		/* TODO: Write a test that ensures the menu element is
-         * hidden by default. You'll have to analyze the HTML and
-         * the CSS to determine how we're performing the
-         * hiding/showing of the menu element.
-         */
-		it('is hidden by default', function () {
+		// valida se por default o menu esta escondido
+		it('is hidden by default', function() {
 			expect($body.classList.contains('menu-hidden')).toBe(true);
 			expect(
 				win.getComputedStyle($slideMenu).getPropertyValue('transform')
 			).toContain('matrix(1, 0, 0, 1, -192, 0)');
 		});
 
-		/* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
-		it('is show/hide when the menu icon is clicked', function () {
+		// valida a mudanca do menu quando clicado uma vez e segunda vez
+		it('is show/hide when the menu icon is clicked', function() {
 			const $menuIconLink = doc.querySelector('.menu-icon-link');
 			$menuIconLink.click();
 			expect($body.classList.contains('menu-hidden')).toBe(false);
@@ -82,50 +78,41 @@ $(function a (win, doc) {
 		});
 	});
 
-	/* TODO: Write a new test suite named "Initial Entries" */
-	describe('Initial Entries', function () {
-		/* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
-
-		beforeEach(function (done) {
-			loadFeed(0, function () {
-				done();
-			});
+	/* Initial Entries */
+	describe('Initial Entries', function() {
+		// carrega os feeds antes de executar cada teste
+		beforeEach(function(done) {
+			loadFeed(0, done);
 		});
 
-		it('There must be at least one .entry element in the .feed container', function (done) {
-			expect(doc.querySelectorAll('.entry').length > 0).toBe(true);
+		// verifica se os feeds estao carregado apos o loadFeed
+		it('There must be at least one .entry element in the .feed container', function(done) {
+			expect(doc.querySelectorAll('.feed .entry').length > 0).toBe(true);
 			done();
 		});
 	});
 
-	/* TODO: Write a new test suite named "New Feed Selection" */
-	describe('New Feed Selection', function () {
-		/* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
-		beforeEach(function (done) {
-			loadFeed(0, function () {
-				done();
+	/* New Feed Selection */
+	describe('New Feed Selection', function() {
+		let oldFeed = null;
+		// carrega os feeds antes de executar cada teste
+		beforeEach(function(done) {
+			loadFeed(0, function() {
+				oldFeed = _selectFirstEntryText();
+				loadFeed(1, done);				
 			});
 		});
 
-		function _selectFirstEntry () {
-			return doc.querySelector('.entry').querySelector('h2').textContent;
+		// funcao para selecionar o primeiro texto .entry dentro de .feed
+		function _selectFirstEntryText () {
+			return doc.querySelector('.feed .entry').querySelector('h2').innerHTML;
 		}
 
-		it('should change the feed list when a new feed loads', function (done) {
-			const oldFeed = _selectFirstEntry();
-			loadFeed(1, function () {
-				const newFeed = _selectFirstEntry();
-				expect(oldFeed !== newFeed).toBe(true);
-				done();
-			});
+		// verifica se o primeiro feed foi alterado apos carregar outro feed
+		it('should change the feed list when a new feed loads', function(done) {
+			const newFeed = _selectFirstEntryText();
+			expect(oldFeed !== newFeed).toBe(true);
+			done();
 		});
 	});
 }(window, document));
